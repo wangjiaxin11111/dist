@@ -44,6 +44,10 @@
       }
 
       /* iOS Safari 优化样式 */
+      :root {
+        --vh: 1vh;
+      }
+      
       body {
         -webkit-overflow-scrolling: touch;
         -webkit-touch-callout: none;
@@ -54,14 +58,19 @@
         user-select: none;
         position: fixed;
         width: 100%;
-        height: 100%;
+        height: 100vh;
+        height: calc(var(--vh, 1vh) * 100);
         overflow: hidden;
+        margin: 0;
+        padding: 0;
       }
 
       #app {
         height: 100vh;
+        height: calc(var(--vh, 1vh) * 100);
         height: -webkit-fill-available;
         overflow: hidden;
+        position: relative;
       }
 
       /* 隐藏iOS Safari地址栏 */
@@ -69,8 +78,15 @@
         body {
           position: fixed;
           width: 100%;
-          height: 100%;
+          height: 100vh;
+          height: calc(var(--vh, 1vh) * 100);
           overflow: hidden;
+        }
+        
+        #app {
+          height: 100vh;
+          height: calc(var(--vh, 1vh) * 100);
+          height: -webkit-fill-available;
         }
         
         /* 防止iOS Safari自动缩放 */
@@ -115,42 +131,77 @@
     <link rel="stylesheet" crossorigin href="./assets/index-Ctqf9ett.css">
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app"></div>
+
     <script>
-      // iOS Safari 优化脚本
+      // iOS Safari 优化脚本 - 强制隐藏地址栏
       (function() {
-        // 防止iOS Safari显示地址栏
-        function preventAddressBar() {
-          if (window.innerHeight < window.outerHeight) {
-            document.body.style.height = window.outerHeight + 'px';
+        // 检测是否为iOS设备
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        const isSafari = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
+        
+        if (isIOS && isSafari) {
+          // 强制设置视口高度
+          function setViewportHeight() {
+            const vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+            document.body.style.height = window.innerHeight + 'px';
+            document.documentElement.style.height = window.innerHeight + 'px';
           }
+          
+          // 立即执行
+          setViewportHeight();
+          
+          // 页面加载完成后执行
+          window.addEventListener('load', function() {
+            setViewportHeight();
+            // 多次延迟执行，确保地址栏隐藏
+            setTimeout(setViewportHeight, 100);
+            setTimeout(setViewportHeight, 300);
+            setTimeout(setViewportHeight, 500);
+          });
+          
+          // 监听窗口大小变化
+          window.addEventListener('resize', function() {
+            setViewportHeight();
+          });
+          
+          // 监听滚动事件，强制隐藏地址栏
+          let scrollTimer = null;
+          window.addEventListener('scroll', function() {
+            // 清除之前的定时器
+            if (scrollTimer) clearTimeout(scrollTimer);
+            
+            // 立即隐藏地址栏
+            setViewportHeight();
+            
+            // 延迟再次设置，确保地址栏隐藏
+            scrollTimer = setTimeout(function() {
+              setViewportHeight();
+            }, 50);
+          });
+          
+          // 监听触摸事件，触发地址栏隐藏
+          let touchStartY = 0;
+          document.addEventListener('touchstart', function(e) {
+            touchStartY = e.touches[0].clientY;
+          }, { passive: true });
+          
+          document.addEventListener('touchmove', function(e) {
+            const touchY = e.touches[0].clientY;
+            const diff = touchStartY - touchY;
+            
+            // 向下滑动时强制隐藏地址栏
+            if (diff > 0) {
+              setViewportHeight();
+            }
+          }, { passive: true });
+          
+          // 监听触摸结束事件
+          document.addEventListener('touchend', function(e) {
+            setTimeout(setViewportHeight, 100);
+          }, { passive: true });
         }
-        
-        // 页面加载完成后执行
-        window.addEventListener('load', function() {
-          preventAddressBar();
-          // 延迟执行，确保页面完全加载
-          setTimeout(preventAddressBar, 100);
-        });
-        
-        // 监听窗口大小变化
-        window.addEventListener('resize', function() {
-          preventAddressBar();
-        });
-        
-        // 监听滚动事件，隐藏地址栏
-        let lastScrollTop = 0;
-        window.addEventListener('scroll', function() {
-          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-          if (scrollTop > lastScrollTop) {
-            // 向下滚动，隐藏地址栏
-            document.body.style.height = '100vh';
-          } else {
-            // 向上滚动
-            document.body.style.height = '100vh';
-          }
-          lastScrollTop = scrollTop;
-        });
         
         // 防止双击缩放
         let lastTouchEnd = 0;
@@ -164,6 +215,11 @@
         
         // 防止长按选择文本
         document.addEventListener('selectstart', function(e) {
+          e.preventDefault();
+        });
+        
+        // 防止上下文菜单
+        document.addEventListener('contextmenu', function(e) {
           e.preventDefault();
         });
       })();
