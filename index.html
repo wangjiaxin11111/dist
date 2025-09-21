@@ -9,7 +9,18 @@
       content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no"
       id="viewport"
     />
-    <title>Douyin</title>
+    <!-- iOS Safari 优化 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="抖音" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="msapplication-navbutton-color" content="#000000" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <!-- 防止iOS Safari显示地址栏 -->
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="format-detection" content="email=no" />
+    <title>抖音</title>
 <script src="https://lib.baomitu.com/vue/3.4.21/vue.runtime.global.prod.min.js"></script>
 <script src="https://lib.baomitu.com/vue-router/4.3.0/vue-router.global.prod.min.js"></script>
 <script src="https://lib.baomitu.com/vue-demi/0.14.7/index.iife.min.js"></script>
@@ -30,6 +41,42 @@
     <style>
       ::-webkit-scrollbar {
         display: none; /* Chrome Safari */
+      }
+
+      /* iOS Safari 优化样式 */
+      body {
+        -webkit-overflow-scrolling: touch;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      #app {
+        height: 100vh;
+        height: -webkit-fill-available;
+        overflow: hidden;
+      }
+
+      /* 隐藏iOS Safari地址栏 */
+      @media screen and (max-width: 768px) {
+        body {
+          position: fixed;
+          width: 100%;
+          height: 100%;
+          overflow: hidden;
+        }
+        
+        /* 防止iOS Safari自动缩放 */
+        input, textarea, select {
+          font-size: 16px;
+        }
       }
 
       .fade-in {
@@ -59,15 +106,67 @@
         }
       }
     </style>
-    <script type="module" crossorigin src="./js/index-BfIUvabI.js"></script>
+    <script type="module" crossorigin src="./js/index-D742R-PU.js"></script>
     <link rel="modulepreload" crossorigin href="./js/vendor-BMWdzOBB.js">
-    <link rel="modulepreload" crossorigin href="./js/common-Wuuydqv9.js">
-    <link rel="modulepreload" crossorigin href="./js/other-BEn9lfqc.js">
+    <link rel="modulepreload" crossorigin href="./js/common-eO_hgNLl.js">
+    <link rel="modulepreload" crossorigin href="./js/other-DV0FsS_V.js">
     <link rel="stylesheet" crossorigin href="./assets/common-Cu6Y5kl-.css">
-    <link rel="stylesheet" crossorigin href="./assets/other-BXzdTV19.css">
+    <link rel="stylesheet" crossorigin href="./assets/other-Du_Ys_Ln.css">
     <link rel="stylesheet" crossorigin href="./assets/index-Ctqf9ett.css">
   </head>
   <body>
     <div id="app"></div>
+    <script>
+      // iOS Safari 优化脚本
+      (function() {
+        // 防止iOS Safari显示地址栏
+        function preventAddressBar() {
+          if (window.innerHeight < window.outerHeight) {
+            document.body.style.height = window.outerHeight + 'px';
+          }
+        }
+        
+        // 页面加载完成后执行
+        window.addEventListener('load', function() {
+          preventAddressBar();
+          // 延迟执行，确保页面完全加载
+          setTimeout(preventAddressBar, 100);
+        });
+        
+        // 监听窗口大小变化
+        window.addEventListener('resize', function() {
+          preventAddressBar();
+        });
+        
+        // 监听滚动事件，隐藏地址栏
+        let lastScrollTop = 0;
+        window.addEventListener('scroll', function() {
+          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+          if (scrollTop > lastScrollTop) {
+            // 向下滚动，隐藏地址栏
+            document.body.style.height = '100vh';
+          } else {
+            // 向上滚动
+            document.body.style.height = '100vh';
+          }
+          lastScrollTop = scrollTop;
+        });
+        
+        // 防止双击缩放
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(event) {
+          const now = (new Date()).getTime();
+          if (now - lastTouchEnd <= 300) {
+            event.preventDefault();
+          }
+          lastTouchEnd = now;
+        }, false);
+        
+        // 防止长按选择文本
+        document.addEventListener('selectstart', function(e) {
+          e.preventDefault();
+        });
+      })();
+    </script>
   </body>
 </html>
