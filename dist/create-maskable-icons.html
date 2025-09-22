@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maskable图标生成器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .icon-preview {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .icon-item {
+            text-align: center;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 10px;
+            background: white;
+        }
+        .icon-item.black-bg {
+            background: #000;
+        }
+        .icon-item.white-bg {
+            background: #fff;
+        }
+        .instructions {
+            background: #e8f4fd;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #2196F3;
+            margin: 20px 0;
+        }
+        canvas {
+            border: 1px solid #ccc;
+            margin: 10px;
+        }
+        button {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #1976D2;
+        }
+        .warning {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #ffc107;
+            margin: 20px 0;
+        }
+        .success {
+            background: #d4edda;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Maskable图标生成器 - 解决桌面白色边框问题</h1>
+        
+        <div class="warning">
+            <h3>⚠️ 问题分析</h3>
+            <p>您遇到的问题是：<strong>添加时图标正常，但添加到桌面后出现白色边框</strong></p>
+            <p>这是因为系统对PWA图标进行了遮罩处理，需要专门的maskable图标设计。</p>
+        </div>
+        
+        <div class="instructions">
+            <h3>🔧 解决方案</h3>
+            <ol>
+                <li><strong>创建maskable图标</strong> - 带有安全边距的图标</li>
+                <li><strong>保持any图标</strong> - 用于添加时的预览</li>
+                <li><strong>系统自动选择</strong> - 根据用途选择合适图标</li>
+            </ol>
+        </div>
+        
+        <h3>当前图标预览：</h3>
+        <div class="icon-preview">
+            <div class="icon-item white-bg">
+                <h4>Any图标 (添加时显示)</h4>
+                <img src="./icon-192.png" alt="192x192" style="width: 96px; height: 96px;">
+                <p>192x192 - purpose: any</p>
+            </div>
+            <div class="icon-item black-bg">
+                <h4>Any图标 (黑色背景)</h4>
+                <img src="./icon-192.png" alt="192x192" style="width: 96px; height: 96px;">
+                <p>192x192 - purpose: any</p>
+            </div>
+        </div>
+        
+        <h3>生成Maskable图标：</h3>
+        <canvas id="maskableCanvas" width="192" height="192" style="border: 2px solid #333;"></canvas>
+        <br>
+        <button onclick="generateMaskableIcon()">生成Maskable图标</button>
+        <button onclick="downloadMaskableIcon()">下载Maskable图标</button>
+        
+        <div class="success">
+            <h3>✅ 修复后的配置</h3>
+            <p>现在manifest.json包含两种图标：</p>
+            <ul>
+                <li><strong>Any图标</strong> - 用于添加时的预览，保持原样</li>
+                <li><strong>Maskable图标</strong> - 用于桌面显示，带有安全边距</li>
+            </ul>
+        </div>
+        
+        <div class="instructions">
+            <h3>📱 测试步骤</h3>
+            <ol>
+                <li>生成并下载maskable图标</li>
+                <li>将图标重命名为 <code>icon-192-maskable.png</code> 和 <code>icon-512-maskable.png</code></li>
+                <li>将图标文件放到 <code>dist</code> 目录</li>
+                <li>清除浏览器缓存</li>
+                <li>重新添加到主屏幕</li>
+                <li>检查桌面图标是否没有白色边框</li>
+            </ol>
+        </div>
+    </div>
+    
+    <script>
+        function generateMaskableIcon() {
+            const canvas = document.getElementById('maskableCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // 清除画布
+            ctx.clearRect(0, 0, 192, 192);
+            
+            // 设置黑色背景
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(0, 0, 192, 192);
+            
+            // 绘制安全边距区域（内圈）
+            const safeArea = 48; // 48px安全边距
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(safeArea, safeArea, 192 - safeArea * 2, 192 - safeArea * 2);
+            
+            // 绘制抖音logo（在安全区域内）
+            const centerX = 96;
+            const centerY = 96;
+            const radius = 60; // 减小半径以适应安全边距
+            
+            ctx.fillStyle = '#FF0050';
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // 绘制文字
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = 'bold 36px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('抖', centerX, centerY);
+            
+            // 绘制安全边距指示线（仅用于预览）
+            ctx.strokeStyle = '#FF0000';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(safeArea, safeArea, 192 - safeArea * 2, 192 - safeArea * 2);
+        }
+        
+        function downloadMaskableIcon() {
+            const canvas = document.getElementById('maskableCanvas');
+            const link = document.createElement('a');
+            link.download = 'icon-192-maskable.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+        
+        // 页面加载时生成图标
+        window.onload = function() {
+            generateMaskableIcon();
+        };
+    </script>
+</body>
+</html>
