@@ -5,8 +5,8 @@ const urlsToCache = [
   '/index.html',
   '/manifest.json',
   '/favicon.ico',
-  '/icon-192.png',
-  '/icon-512.png'
+  '/icon-192.jpeg',
+  '/icon-512.jpeg'
 ];
 
 // 安装事件

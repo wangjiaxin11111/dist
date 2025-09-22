@@ -99,12 +99,12 @@
         <div class="icon-preview">
             <div class="icon-item white-bg">
                 <h4>Any图标 (添加时显示)</h4>
-                <img src="./icon-192.png" alt="192x192" style="width: 96px; height: 96px;">
+                <img src="./icon-192.jpeg" alt="192x192" style="width: 96px; height: 96px;">
                 <p>192x192 - purpose: any</p>
             </div>
             <div class="icon-item black-bg">
                 <h4>Any图标 (黑色背景)</h4>
-                <img src="./icon-192.png" alt="192x192" style="width: 96px; height: 96px;">
+                <img src="./icon-192.jpeg" alt="192x192" style="width: 96px; height: 96px;">
                 <p>192x192 - purpose: any</p>
             </div>
         </div>
@@ -128,7 +128,7 @@
             <h3>📱 测试步骤</h3>
             <ol>
                 <li>生成并下载maskable图标</li>
-                <li>将图标重命名为 <code>icon-192-maskable.png</code> 和 <code>icon-512-maskable.png</code></li>
+                <li>将图标重命名为 <code>icon-192-maskable.jpeg</code> 和 <code>icon-192-maskable.jpeg</code></li>
                 <li>将图标文件放到 <code>dist</code> 目录</li>
                 <li>清除浏览器缓存</li>
                 <li>重新添加到主屏幕</li>
@@ -180,7 +180,7 @@
         function downloadMaskableIcon() {
             const canvas = document.getElementById('maskableCanvas');
             const link = document.createElement('a');
-            link.download = 'icon-192-maskable.png';
+            link.download = 'icon-192-maskable.jpeg';
             link.href = canvas.toDataURL();
             link.click();
         }

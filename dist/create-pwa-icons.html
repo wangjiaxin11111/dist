@@ -80,12 +80,12 @@
         <div class="icon-preview">
             <div class="icon-item white-bg">
                 <h4>白色背景</h4>
-                <img src="./icon-192.png" alt="192x192" style="width: 96px; height: 96px;">
+                <img src="./icon-192.jpeg" alt="192x192" style="width: 96px; height: 96px;">
                 <p>192x192</p>
             </div>
             <div class="icon-item black-bg">
                 <h4>黑色背景</h4>
-                <img src="./icon-192.png" alt="192x192" style="width: 96px; height: 96px;">
+                <img src="./icon-192.jpeg" alt="192x192" style="width: 96px; height: 96px;">
                 <p>192x192</p>
             </div>
         </div>
@@ -146,7 +146,7 @@
         function downloadIcon() {
             const canvas = document.getElementById('iconCanvas');
             const link = document.createElement('a');
-            link.download = 'pwa-icon-192.png';
+            link.download = 'pwa-icon-192.jpeg';
             link.href = canvas.toDataURL();
             link.click();
         }
