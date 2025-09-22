@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWA图标测试</title>
+    <link rel="manifest" href="./manifest.json">
+    <link rel="apple-touch-icon" sizes="180x180" href="./icon-192.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="./icon-192.png" />
+    <link rel="apple-touch-icon" sizes="512x512" href="./icon-512.png" />
+    <link rel="apple-touch-icon" href="./icon-192.png" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        .icon-test {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        .icon-preview {
+            border: 2px solid #333;
+            border-radius: 10px;
+            padding: 10px;
+            background: white;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .instructions {
+            background: #e8f4fd;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #2196F3;
+        }
+    </style>
+</head>
+<body>
+    <div class="icon-test">
+        <h1>PWA图标测试页面</h1>
+        
+        <div class="instructions">
+            <h3>测试步骤：</h3>
+            <ol>
+                <li>在移动设备上打开此页面</li>
+                <li>使用浏览器的"添加到主屏幕"功能</li>
+                <li>检查主屏幕上的图标是否没有白色边框</li>
+                <li>如果仍有问题，请清除浏览器缓存后重试</li>
+            </ol>
+        </div>
+        
+        <div class="icon-preview">
+            <h3>192x192 图标预览：</h3>
+            <img src="./icon-192.png" alt="192x192 icon" style="width: 96px; height: 96px;">
+        </div>
+        
+        <div class="icon-preview">
+            <h3>512x512 图标预览：</h3>
+            <img src="./icon-512.png" alt="512x512 icon" style="width: 96px; height: 96px;">
+        </div>
+        
+        <div class="instructions">
+            <h3>修复说明：</h3>
+            <ul>
+                <li>✅ 移除了 "maskable" purpose，改为 "any"</li>
+                <li>✅ 添加了 "monochrome" purpose 支持</li>
+                <li>✅ 优化了 Apple Touch Icon 配置</li>
+                <li>✅ 确保图标路径正确</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
